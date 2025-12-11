@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,7 +19,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { BookOpen, Sparkles, Trophy, Users } from "lucide-react";
+import { BookOpen, Sparkles, Trophy, Users, MessageSquare } from "lucide-react";
 
 export default function Home() {
   return (
@@ -31,6 +32,12 @@ export default function Home() {
             <h1 className="text-xl font-bold">Eleven Lingo</h1>
           </div>
           <div className="flex items-center gap-4">
+            <Button variant="ghost" asChild>
+              <Link href="/chat">
+                <MessageSquare className="mr-2 h-4 w-4" />
+                Chat
+              </Link>
+            </Button>
             <Button variant="ghost">About</Button>
             <Button variant="ghost">Contact</Button>
             <ModeToggle />
@@ -54,12 +61,11 @@ export default function Home() {
             intelligence. Personalized, interactive, and effective.
           </p>
           <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-            <Button size="lg" className="gap-2">
-              Get Started Free
-              <Sparkles className="h-4 w-4" />
-            </Button>
-            <Button size="lg" variant="outline">
-              View Demo
+            <Button size="lg" className="gap-2" asChild>
+              <Link href="/chat">
+                Try Now
+                <MessageSquare className="h-4 w-4" />
+              </Link>
             </Button>
           </div>
         </div>
