@@ -9,7 +9,20 @@
       "start": "node dist/index.js"
     },
     "dependencies": {
-    },
-    "devDependencies": {
-    }
+        "@a2a-js/sdk": "^0.3.6",
+        "@mastra/core": "^0.24.8",
+        "cors": "^2.8.5",
+        "dotenv": "^17.2.3",
+        "express": "^5.2.1",
+        "uuid": "^13.0.0",
+        "zod": "^3.25.76"
+      },
+      "devDependencies": {
+        "@types/cors": "^2.8.17",
+        "@types/express": "^5.0.0",
+        "@types/node": "^22.0.0",
+        "@types/uuid": "^10.0.0",
+        "tsx": "^4.19.0",
+        "typescript": "^5.7.0"
+      }
   }

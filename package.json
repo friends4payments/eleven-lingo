@@ -1,21 +1,11 @@
 {
   "name": "eleven-lingo-monorepo",
-  "private": true,
-  "scripts": {},
-  "workspaces": [],
-  "dependencies": {
-    "@a2a-js/sdk": "^0.3.6",
-    "@mastra/core": "^0.24.8",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
-    "express": "^5.2.1",
-    "uuid": "^13.0.0",
-    "zod": "^3.25.76"
+  "private": false,
+  "scripts": {
+    "dev:minecraft": "pnpm --filter minecraft-gamer dev",
+    "dev": "pnpm dev:minecraft"
   },
-  "devDependencies": {
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6",
-    "@types/uuid": "^10.0.0",
-    "typescript": "^5.9.3"
-  }
+  "workspaces": [
+    "agents/*"
+  ]
 }
