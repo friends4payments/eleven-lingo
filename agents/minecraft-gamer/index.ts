@@ -11,6 +11,8 @@ import {
 } from "@a2a-js/sdk/server";
 import { A2AExpressApp } from "@a2a-js/sdk/server/express";
 import { Agent } from "@mastra/core/agent";
+import { Memory } from "@mastra/memory";
+import { LibSQLStore } from "@mastra/libsql";
 import dotenv from "dotenv";
 import {
   createBotTool,
@@ -50,6 +52,11 @@ const gamerAgent = new Agent({
     collectResourceTool,
     jumpTool,
   },
+  memory: new Memory({
+    storage: new LibSQLStore({
+      url: ":memory:",
+    }),
+  }),
 });
 
 // Implement executor
