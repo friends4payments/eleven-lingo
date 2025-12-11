@@ -1,9 +1,11 @@
 import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
 import { createBot, Bot } from "mineflayer";
-import { pathfinder, Movements, goals } from "mineflayer-pathfinder";
+import pf from "mineflayer-pathfinder";
 import { plugin as collectblock } from "mineflayer-collectblock";
 import minecraftData from "minecraft-data";
+
+const { pathfinder, Movements, goals } = pf;
 
 let bot: Bot | null = null;
 
