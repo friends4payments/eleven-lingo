@@ -124,8 +124,7 @@ export default function ChatPage() {
             textOnly: false,
           },
         },
-        // Register custom tools (optional)
-        // clientTools,
+        clientTools,
         onStatusChange: (status) => {
           console.log("Status changed:", status);
           setAgentState(status.status);

@@ -4,7 +4,7 @@
   "scripts": {
     "dev:minecraft": "pnpm --filter minecraft-gamer dev",
     "dev:frontend": "pnpm --filter frontend dev",
-    "dev": "pnpm dev:minecraft",
+    "dev": "concurrently \"pnpm dev:minecraft\" \"pnpm dev:frontend\"",
     "build:frontend": "pnpm --filter frontend build",
     "start:frontend": "pnpm --filter frontend start"
   },
@@ -12,6 +12,7 @@
     "agents/*",
     "frontend"
   ],
-  "dependencies": {
+  "devDependencies": {
+    "concurrently": "^9.1.0"
   }
 }
