@@ -1,74 +1,80 @@
-/**
- * Herramientas personalizadas para el agente de ElevenLabs
- * 
- * Estas funciones se ejecutan en el cliente y permiten al agente
- * realizar acciones específicas durante la conversación.
- */
-
+import { MessageSendParams, SendMessageSuccessResponse } from "@a2a-js/sdk";
+import { A2AClient } from "@a2a-js/sdk/client";
 import { v4 as uuidv4 } from "uuid";
 
-/**
- * Ejemplo de herramienta personalizada que envía un mensaje a otro agente
- * 
- * @param message - El mensaje a enviar
- * @returns JSON con la respuesta del agente
- */
-export const sendMessageTool = async ({ message }: { message: string }) => {
-  try {
-    // Aquí puedes implementar la lógica para comunicarte con otro agente
-    // Por ejemplo, con el agente de Minecraft u otro servicio
-    
-    const gameAgentUrl = process.env.NEXT_PUBLIC_GAME_AGENT_URL;
-    
-    if (!gameAgentUrl) {
-      return JSON.stringify({
-        error: "URL del agente no configurada",
-        message: "Por favor configura NEXT_PUBLIC_GAME_AGENT_URL en .env.local"
-      });
-    }
-
-    // Ejemplo de llamada a otro servicio
-    // const response = await fetch(`${gameAgentUrl}/api/message`, {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ message, messageId: uuidv4() }),
-    // });
-    
-    // const data = await response.json();
-    // return JSON.stringify(data);
-
-    // Por ahora, retornamos un mensaje de ejemplo
-    return JSON.stringify({
-      success: true,
-      message: `Mensaje recibido: ${message}`,
-      messageId: uuidv4()
-    });
-    
-  } catch (error) {
-    console.error("Error en sendMessageTool:", error);
-    return JSON.stringify({
-      error: "Error al enviar mensaje",
-      details: error instanceof Error ? error.message : "Error desconocido"
-    });
-  }
+const agentConfig = {
+  cardUrl: process.env.NEXT_PUBLIC_GAME_AGENT_URL || "",
+  name: "Minecraft Game Agent",
 };
 
-/**
- * Ejemplo de herramienta para obtener información del sistema
- */
-export const getSystemInfoTool = async () => {
+export const sendMessageTool = async ({ message }: { message: string }) => {
+  console.log("message", message);
+  let client: A2AClient;
+  try {
+    client = await A2AClient.fromCardUrl(agentConfig.cardUrl);
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    throw new Error(
+      `Failed to connect to agent "${agentConfig.name}" at ${agentConfig.cardUrl}: ${errorMsg}`
+    );
+  }
+
+  const sendParams: MessageSendParams = {
+    message: {
+      messageId: uuidv4(),
+      role: "user",
+      parts: [{ kind: "text", text: message }],
+      kind: "message",
+    },
+  };
+
+  console.log("sendParams", sendParams);
+
+  const response = await client.sendMessage(sendParams);
+
+  if ("error" in response) {
+    console.error(`❌ Error from ${agentConfig.name}:`, response.error.message);
+    throw new Error(`Agent "${agentConfig.name}" returned error: ${response.error.message}`);
+  }
+
+  const result = (response as SendMessageSuccessResponse).result;
+
+  if (result.kind !== "message") {
+    throw new Error(`Agent "${agentConfig.name}" response is not a message`);
+  }
+
+  // Iterate through all parts to extract text and data
+  let text = "";
+  let data: Record<string, unknown> | undefined;
+
+  for (const part of result.parts) {
+    switch (part.kind) {
+      case "text":
+        text += part.text;
+        break;
+      case "data":
+        // Merge data from all DataParts
+        data = { ...data, ...part.data };
+        break;
+    }
+  }
+
+  if (!text) {
+    throw new Error(`Agent "${agentConfig.name}" response does not contain text`);
+  }
+
+  console.log(`📥 Response from ${agentConfig.name}: "${text.substring(0, 100)}..."`);
+
   return JSON.stringify({
-    timestamp: new Date().toISOString(),
-    userAgent: typeof window !== "undefined" ? window.navigator.userAgent : "N/A",
-    language: typeof window !== "undefined" ? window.navigator.language : "N/A",
+    text,
+    data,
   });
 };
 
 /**
- * Mapeo de nombres de herramientas a funciones
- * Este objeto se registra en useConversation
+ * Mapping of tool names to functions
+ * This object is registered in useConversation
  */
 export const clientTools = {
   sendMessage: sendMessageTool,
-  getSystemInfo: getSystemInfoTool,
 };
