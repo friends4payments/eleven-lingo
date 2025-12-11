@@ -12,7 +12,12 @@ import {
 import { A2AExpressApp } from "@a2a-js/sdk/server/express";
 import { Agent } from "@mastra/core/agent";
 import dotenv from "dotenv";
-import { createBotTool } from "./tools/game-tools.js";
+import {
+  createBotTool,
+  followMeTool,
+  collectResourceTool,
+  jumpTool,
+} from "./tools/game-tools.js";
 
 dotenv.config();
 
@@ -25,6 +30,9 @@ const agentCard: AgentCard = {
   url: process.env.GAME_AGENT_CARD_URL || "http://localhost:4004/",
   skills: [
     { id: "create_bot", name: "Create bot", description: "Create a minecraft bot", tags: ["bot"] },
+    { id: "follow_me", name: "Follow me", description: "Follows the player in the game", tags: ["follow"] },
+    { id: "collect_resource", name: "Collect resource", description: "Collects in game resources", tags: ["collect"] },
+    { id: "jump", name: "Jump", description: "Makes the bot jump", tags: ["jump"] },
   ],
   capabilities: { streaming: false, pushNotifications: false, stateTransitionHistory: false },
   defaultInputModes: [],
@@ -36,7 +44,12 @@ const gamerAgent = new Agent({
   name: "Gamer Agent",
   instructions: "You are an expert minecraft gamer. Use your tools to help players.",
   model: "openai/gpt-4.1",
-  tools: { createBotTool},
+  tools: {
+    createBotTool,
+    followMeTool,
+    collectResourceTool,
+    jumpTool,
+  },
 });
 
 // Implement executor
@@ -44,7 +57,7 @@ class GameExecutor implements AgentExecutor {
   async execute(requestContext: RequestContext, eventBus: ExecutionEventBus): Promise<void> {
     const text = requestContext.userMessage.parts.find((p) => p.kind === "text")?.text as string;
     if (!text) throw new Error("No text message");
- .
+
     const response = await gamerAgent.generate([{ role: "user", content: text }], { maxSteps: 1000 });
 
     const responseMessage: Message = {

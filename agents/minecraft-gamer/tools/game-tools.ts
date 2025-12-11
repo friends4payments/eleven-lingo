@@ -133,3 +133,16 @@ export const collectResourceTool = createTool({
     return await collectBlocks(targetBlock, amount);
   },
 });
+
+export const jumpTool = createTool({
+  id: "jump",
+  description: "Makes the bot jump once.",
+  inputSchema: z.object({}),
+  outputSchema: z.object({ message: z.string() }),
+  execute: async () => {
+    if (!bot) return { message: "No bot connected" };
+    bot.setControlState("jump", true);
+    setTimeout(() => bot?.setControlState("jump", false), 500);
+    return { message: "Bot jumped!" };
+  },
+});
