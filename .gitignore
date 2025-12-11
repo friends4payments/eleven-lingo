@@ -1,6 +1,6 @@
 # prod
 dist/
-
+.pnpm-store
 # dev
 .yarn/
 !.yarn/releases
