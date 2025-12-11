@@ -3,7 +3,10 @@
   "private": false,
   "scripts": {
     "dev:minecraft": "pnpm --filter minecraft-gamer dev",
-    "dev": "pnpm dev:minecraft"
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev": "pnpm dev:minecraft",
+    "build:frontend": "pnpm --filter frontend build",
+    "start:frontend": "pnpm --filter frontend start"
   },
   "workspaces": [
     "agents/*"
