@@ -12,6 +12,7 @@ import {
 import { A2AExpressApp } from "@a2a-js/sdk/server/express";
 import { Agent } from "@mastra/core/agent";
 import dotenv from "dotenv";
+import { createBotTool } from "./tools/game-tools.js";
 
 dotenv.config();
 
@@ -35,7 +36,7 @@ const gamerAgent = new Agent({
   name: "Gamer Agent",
   instructions: "You are an expert minecraft gamer. Use your tools to help players.",
   model: "openai/gpt-4.1",
-  tools: { },
+  tools: { createBotTool},
 });
 
 // Implement executor
@@ -43,7 +44,7 @@ class GameExecutor implements AgentExecutor {
   async execute(requestContext: RequestContext, eventBus: ExecutionEventBus): Promise<void> {
     const text = requestContext.userMessage.parts.find((p) => p.kind === "text")?.text as string;
     if (!text) throw new Error("No text message");
-
+ .
     const response = await gamerAgent.generate([{ role: "user", content: text }], { maxSteps: 1000 });
 
     const responseMessage: Message = {

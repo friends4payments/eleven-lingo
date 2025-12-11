@@ -9,6 +9,8 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "mineflayer": "^4.33.0",
+    "mineflayer-pathfinder": "^2.4.5",
     "uuid": "^13.0.0",
     "zod": "^3.25.76"
   },
