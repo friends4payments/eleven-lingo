@@ -1,0 +1,8 @@
+{
+  "name": "eleven-lingo-monorepo",
+  "private": true,
+  "scripts": {
+  },
+  "workspaces": [
+  ]
+}
