@@ -12,6 +12,12 @@ import {
 import { A2AExpressApp } from "@a2a-js/sdk/server/express";
 import { Agent } from "@mastra/core/agent";
 import dotenv from "dotenv";
+import {
+  createBotTool,
+  followMeTool,
+  collectResourceTool,
+  jumpTool,
+} from "./tools/game-tools.js";
 
 dotenv.config();
 
@@ -24,6 +30,9 @@ const agentCard: AgentCard = {
   url: process.env.GAME_AGENT_CARD_URL || "http://localhost:4004/",
   skills: [
     { id: "create_bot", name: "Create bot", description: "Create a minecraft bot", tags: ["bot"] },
+    { id: "follow_me", name: "Follow me", description: "Follows the player in the game", tags: ["follow"] },
+    { id: "collect_resource", name: "Collect resource", description: "Collects in game resources", tags: ["collect"] },
+    { id: "jump", name: "Jump", description: "Makes the bot jump", tags: ["jump"] },
   ],
   capabilities: { streaming: false, pushNotifications: false, stateTransitionHistory: false },
   defaultInputModes: [],
@@ -35,7 +44,12 @@ const gamerAgent = new Agent({
   name: "Gamer Agent",
   instructions: "You are an expert minecraft gamer. Use your tools to help players.",
   model: "openai/gpt-4.1",
-  tools: { },
+  tools: {
+    createBotTool,
+    followMeTool,
+    collectResourceTool,
+    jumpTool,
+  },
 });
 
 // Implement executor

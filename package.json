@@ -10,5 +10,9 @@
   },
   "workspaces": [
     "agents/*"
-  ]
+  ],
+  "dependencies": {
+    "mineflayer": "^4.33.0",
+    "mineflayer-pathfinder": "^2.4.5"
+  }
 }
