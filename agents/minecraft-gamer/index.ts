@@ -19,6 +19,8 @@ import {
   followMeTool,
   collectResourceTool,
   jumpTool,
+  getDirtTool,
+  getSandTool,
 } from "./tools/game-tools.js";
 
 dotenv.config();
@@ -35,6 +37,8 @@ const agentCard: AgentCard = {
     { id: "follow_me", name: "Follow me", description: "Follows the player in the game", tags: ["follow"] },
     { id: "collect_resource", name: "Collect resource", description: "Collects in game resources", tags: ["collect"] },
     { id: "jump", name: "Jump", description: "Makes the bot jump", tags: ["jump"] },
+    { id: "get_dirt", name: "Get dirt", description: "Collects one dirt block", tags: ["collect"] },
+    { id: "get_sand", name: "Get sand", description: "Collects one sand block", tags: ["collect"] },
   ],
   capabilities: { streaming: false, pushNotifications: false, stateTransitionHistory: false },
   defaultInputModes: [],
@@ -51,6 +55,8 @@ const gamerAgent = new Agent({
     followMeTool,
     collectResourceTool,
     jumpTool,
+    getDirtTool,
+    getSandTool,
   },
   memory: new Memory({
     storage: new LibSQLStore({

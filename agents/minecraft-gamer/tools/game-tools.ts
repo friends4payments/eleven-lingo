@@ -143,8 +143,47 @@ export const jumpTool = createTool({
   outputSchema: z.object({ message: z.string() }),
   execute: async () => {
     if (!bot) return { message: "No bot connected" };
+    
+    const startY = bot.entity.position.y;
+    console.log(`Jump: Starting at Y=${startY}, onGround=${bot.entity.onGround}`);
+    
+    // Press and hold jump for a moment
     bot.setControlState("jump", true);
-    setTimeout(() => bot?.setControlState("jump", false), 500);
-    return { message: "Bot jumped!" };
+    
+    // Wait a bit for physics to process
+    await new Promise((resolve) => setTimeout(resolve, 350));
+    
+    bot.setControlState("jump", false);
+    
+    const endY = bot.entity.position.y;
+    console.log(`Jump: Ended at Y=${endY}, moved ${endY - startY}`);
+    
+    if (endY > startY) {
+      return { message: `Bot jumped! (moved up ${(endY - startY).toFixed(2)} blocks)` };
+    } else {
+      return { message: `Jump attempted but Y didn't change (was ${startY}, now ${endY})` };
+    }
+  },
+});
+
+export const getDirtTool = createTool({
+  id: "get-dirt",
+  description: "Makes the bot collect one dirt block nearby.",
+  inputSchema: z.object({}),
+  outputSchema: z.object({ message: z.string() }),
+  execute: async () => {
+    if (!bot) return { message: "No bot connected" };
+    return await collectBlocks("dirt", 1);
+  },
+});
+
+export const getSandTool = createTool({
+  id: "get-sand",
+  description: "Makes the bot collect one sand block nearby.",
+  inputSchema: z.object({}),
+  outputSchema: z.object({ message: z.string() }),
+  execute: async () => {
+    if (!bot) return { message: "No bot connected" };
+    return await collectBlocks("sand", 1);
   },
 });
