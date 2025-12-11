@@ -9,12 +9,9 @@
     "start:frontend": "pnpm --filter frontend start"
   },
   "workspaces": [
-    "agents/*"
+    "agents/*",
+    "frontend"
   ],
   "dependencies": {
-    "minecraft-data": "^3.101.0",
-    "mineflayer": "^4.33.0",
-    "mineflayer-collectblock": "^1.6.0",
-    "mineflayer-pathfinder": "^2.4.5"
   }
 }
